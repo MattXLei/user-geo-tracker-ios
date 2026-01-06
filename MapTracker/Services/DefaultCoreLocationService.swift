@@ -9,7 +9,8 @@ final class DefaultCoreLocationService: NSObject, CoreLocationService, CLLocatio
     override init() {
         super.init()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        manager.distanceFilter = 5
     }
 
     func start(updating handler: @escaping (CLLocation) -> Void) {

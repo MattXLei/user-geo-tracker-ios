@@ -6,6 +6,7 @@ import Combine
 @MainActor
 final class TrackingViewModel: ObservableObject {
     @Published var isTracking = false
+    @Published var errorMessage: String?
     @Published var lastLocation: CLLocation?
     @Published private(set) var locationHistory: [LocationPoint] = []
     @Published var mapImage: UIImage?
@@ -26,40 +27,38 @@ final class TrackingViewModel: ObservableObject {
 
     func toggleTracking() {
         if coreLocationService.isRunning {
-            coreLocationService.stop()
             isTracking = false
+            coreLocationService.stop()
         } else {
-            coreLocationService.start { [weak self] location in
-                self?.handleLocationUpdate(location)
-            }
             isTracking = true
+            coreLocationService.start(updating: handleLocationUpdate)
         }
     }
     
-    func refreshMap() {
-        Task {
-            do {
-                let data = try await locationService.fetchMapImage(userId: userId)
+    @MainActor
+    func refreshMap() async {
+        do {
+            let data = try await locationService.fetchMapImage(userId: userId)
 
-                guard let image = UIImage(data: data) else {
-                    print("Failed to decode map image")
-                    return
-                }
-
-                self.mapImage = image
-            } catch {
-                print("Map fetch failed:", error)
+            guard let image = UIImage(data: data) else {
+                print("Failed to decode map image")
+                return
             }
+            
+            self.mapImage = image
+        } catch {
+            print("Map fetch failed:", error)
         }
     }
     
     func handleLocationUpdate(_ location: CLLocation) {
+        guard isTracking else { return }
         guard shouldAccept(location) else { return }
-
+        
         let point = LocationPoint(
             id: self.userId,
-            latitude: location.coordinate.latitude,
-            longitude: location.coordinate.longitude,
+            lat: location.coordinate.latitude,
+            lon: location.coordinate.longitude,
             timestamp: location.timestamp
         )
 
@@ -74,11 +73,13 @@ final class TrackingViewModel: ObservableObject {
     }
     
     private func send(point: LocationPoint) {
-        Task.detached { [locationService, userId] in
-            try? await locationService.sendLocation(
-                point,
-                userId: userId
-            )
+        Task { [locationService, userId] in
+            do {
+                try await locationService.sendLocation(point, userId: userId)
+                await refreshMap()
+            } catch {
+                self.errorMessage = "Failed to sync location. Check your connection."
+            }
         }
     }
     
@@ -86,12 +87,12 @@ final class TrackingViewModel: ObservableObject {
         guard let last = locationHistory.last else { return true }
 
         let distance = location.distance(from: CLLocation(
-            latitude: last.latitude,
-            longitude: last.longitude
+            latitude: last.lat,
+            longitude: last.lon
         ))
 
         let timeDelta = location.timestamp.timeIntervalSince(last.timestamp)
 
-        return distance > 5 && timeDelta > 5
+        return distance > 5 && timeDelta > 0.5
     }
 }

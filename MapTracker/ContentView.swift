@@ -47,6 +47,10 @@ struct ContentView: View {
                 .font(.caption)
                 .foregroundColor(.gray)
             }
+            
+            if let error = viewModel.errorMessage {
+                Text(error).font(.caption).foregroundColor(.red).padding()
+            }
 
             Spacer()
         }

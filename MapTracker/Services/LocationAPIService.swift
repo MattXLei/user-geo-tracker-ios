@@ -5,7 +5,7 @@ final class LocationAPIService: LocationService {
     private let baseURL: URL
     private let session: URLSession
 
-    init(baseURL: URL = URL(string: "http://127.0.0.1:8000")!, session: URLSession = .shared) {
+    init(baseURL: URL = URL(string: "http://10.0.0.135:8000")!, session: URLSession = .shared) { // "http://127.0.0.1:8000"
         self.baseURL = baseURL
         self.session = session
     }

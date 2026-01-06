@@ -26,9 +26,22 @@
 		0D10CA612F072C4B003227F6 /* MapTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0D10CAE22F0CC4D4003227F6 /* Exceptions for "MapTracker" folder in "MapTracker" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0D10CA1E2F070A30003227F6 /* MapTracker */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0D10CA212F070A30003227F6 /* MapTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0D10CAE22F0CC4D4003227F6 /* Exceptions for "MapTracker" folder in "MapTracker" target */,
+			);
 			path = MapTracker;
 			sourceTree = "<group>";
 		};
@@ -333,9 +346,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7V7JM5QHNM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "";
+				INFOPLIST_FILE = MapTracker/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app needs to connect to your local server to track your location.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We track your location to show your path on the map";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -367,9 +382,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7V7JM5QHNM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "";
+				INFOPLIST_FILE = MapTracker/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "This app needs to connect to your local server to track your location.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We track your location to show your path on the map";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

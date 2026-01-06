@@ -50,6 +50,7 @@ final class TrackingViewModelTests: XCTestCase, Sendable {
             timestamp: timestamp
         )
 
+        viewModel.toggleTracking()
         viewModel.handleLocationUpdate(location)
         XCTAssertEqual(viewModel.locationHistory.count, 1)
 
@@ -57,8 +58,8 @@ final class TrackingViewModelTests: XCTestCase, Sendable {
         XCTAssertEqual(fakeLocationService.sentPoints.count, 1)
 
         let point = fakeLocationService.sentPoints.first!
-        XCTAssertEqual(point.latitude, 33.0)
-        XCTAssertEqual(point.longitude, -84.0)
+        XCTAssertEqual(point.lat, 33.0)
+        XCTAssertEqual(point.lon, -84.0)
         XCTAssertEqual(point.timestamp, timestamp)
     }
 
@@ -113,5 +114,21 @@ final class TrackingViewModelTests: XCTestCase, Sendable {
         XCTAssertEqual(self.viewModel.locationHistory.count, 2)
         wait(for: [expectation], timeout: 5.0)
         XCTAssertEqual(self.fakeLocationService.sentPoints.count, 2)
+    }
+    
+    func testRefreshMapAppliesFetchedImage() async throws {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 10, height: 10))
+        let image = renderer.image { ctx in
+            UIColor.red.setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: 10, height: 10))
+        }
+
+        fakeLocationService.mapImageData = image.pngData()
+
+        await viewModel.refreshMap()
+        let mapImage = try XCTUnwrap(viewModel.mapImage)
+
+        XCTAssertGreaterThan(mapImage.size.width, 0)
+        XCTAssertGreaterThan(mapImage.size.height, 0)
     }
 }
