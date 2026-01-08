@@ -6,18 +6,15 @@ import CoreLocation
 final class LocationHistoryTests: XCTestCase {
 
     private var viewModel: TrackingViewModel!
-    private var fakeLocationService: FakeLocationService!
     private var fakeCoreLocationService: FakeCoreLocationService!
 
     override func setUp() {
         super.setUp()
 
-        fakeLocationService = FakeLocationService()
         fakeCoreLocationService = FakeCoreLocationService()
 
         viewModel = TrackingViewModel(
             userId: "test-user",
-            locationService: fakeLocationService,
             coreLocationService: fakeCoreLocationService,
         )
     }

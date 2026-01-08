@@ -28,6 +28,10 @@ final class LocationAPIService: LocationService {
         _ = try await session.data(for: request)
     }
 
+    // DEPRECATED: MapKit is now used for interactive map visualization
+    // Keeping method for backwards compatibility with LocationService protocol
+    // If you want to restore Python backend map rendering, uncomment below
+    /*
     func fetchMapImage(userId: String) async throws -> Data {
         let url = baseURL.appendingPathComponent(
             "users/\(userId)/map"
@@ -36,4 +40,5 @@ final class LocationAPIService: LocationService {
         let (data, _) = try await session.data(from: url)
         return data
     }
+    */
 }

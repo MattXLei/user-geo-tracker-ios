@@ -12,9 +12,10 @@ final class FakeLocationService: LocationService {
         onSend?()
     }
 
+    // DEPRECATED: Python backend image fetching - keeping for reference
+    // MapKit is now used for interactive map visualization
     func fetchMapImage(userId: String) async throws -> Data {
         onMapUpdated?()
         return mapImageData ?? Data()
     }
 }
-

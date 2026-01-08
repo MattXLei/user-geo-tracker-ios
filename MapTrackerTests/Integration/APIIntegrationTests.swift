@@ -1,4 +1,4 @@
-import XCTest
+/*import XCTest
 import CoreLocation
 import UIKit
 @testable import MapTracker
@@ -171,3 +171,4 @@ final class TrackingViewModelAPIIntegrationTests: XCTestCase {
         print("Saved generated image to: \(testImageURL.path)")
     }
 }
+*/

@@ -7,13 +7,11 @@ struct ContentView: View {
 
     init(
         userId: String,
-        locationService: LocationService,
         coreLocationService: CoreLocationService
     ) {
         _viewModel = StateObject(
             wrappedValue: TrackingViewModel(
                 userId: userId,
-                locationService: locationService,
                 coreLocationService: coreLocationService
             )
         )
@@ -46,10 +44,6 @@ struct ContentView: View {
                 }
                 .font(.caption)
                 .foregroundColor(.gray)
-            }
-            
-            if let error = viewModel.errorMessage {
-                Text(error).font(.caption).foregroundColor(.red).padding()
             }
 
             Spacer()
