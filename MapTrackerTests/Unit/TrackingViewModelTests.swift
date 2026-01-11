@@ -90,27 +90,6 @@ final class TrackingViewModelTests: XCTestCase, Sendable {
         XCTAssertEqual(self.viewModel.locationHistory.count, 2)
     }
     
-    // DEPRECATED: Map image refresh test - now using MapKit for visualization
-    // Keeping test structure for reference if Python backend is restored
-    /*
-     func testRefreshMapAppliesFetchedImage() async throws {
-     let renderer = UIGraphicsImageRenderer(size: CGSize(width: 10, height: 10))
-     let image = renderer.image { ctx in
-     UIColor.red.setFill()
-     ctx.fill(CGRect(x: 0, y: 0, width: 10, height: 10))
-     }
-     
-     fakeLocationService.mapImageData = image.pngData()
-     
-     await viewModel.refreshMap()
-     let mapImage = try XCTUnwrap(viewModel.mapImage)
-     
-     XCTAssertGreaterThan(mapImage.size.width, 0)
-     XCTAssertGreaterThan(mapImage.size.height, 0)
-     }
-     */
-    
-    // MapKit-based tests
     func testSelectLocationUpdatesSelectedLocation() {
         let point = LocationPoint(
             id: "test-id",
