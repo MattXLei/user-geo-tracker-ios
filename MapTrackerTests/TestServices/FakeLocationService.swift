@@ -11,10 +11,4 @@ final class FakeLocationService: LocationService {
         sentPoints.append(point)
         onSend?()
     }
-
-    func fetchMapImage(userId: String) async throws -> Data {
-        onMapUpdated?()
-        return mapImageData ?? Data()
-    }
 }
-

@@ -1,27 +1,21 @@
 import Foundation
 import CoreLocation
 import UIKit
+import MapKit
 import Combine
 
 @MainActor
 final class TrackingViewModel: ObservableObject {
     @Published var isTracking = false
-    @Published var errorMessage: String?
     @Published var lastLocation: CLLocation?
     @Published private(set) var locationHistory: [LocationPoint] = []
-    @Published var mapImage: UIImage?
+    @Published var selectedLocation: LocationPoint?
 
     private let userId: String
-    private let locationService: LocationService
     private let coreLocationService: CoreLocationService
 
-    init(
-        userId: String,
-        locationService: LocationService,
-        coreLocationService: CoreLocationService,
-    ) {
+    init(userId: String, coreLocationService: CoreLocationService) {
         self.userId = userId
-        self.locationService = locationService
         self.coreLocationService = coreLocationService
     }
 
@@ -32,22 +26,6 @@ final class TrackingViewModel: ObservableObject {
         } else {
             isTracking = true
             coreLocationService.start(updating: handleLocationUpdate)
-        }
-    }
-    
-    @MainActor
-    func refreshMap() async {
-        do {
-            let data = try await locationService.fetchMapImage(userId: userId)
-
-            guard let image = UIImage(data: data) else {
-                print("Failed to decode map image")
-                return
-            }
-            
-            self.mapImage = image
-        } catch {
-            print("Map fetch failed:", error)
         }
     }
     
@@ -63,7 +41,6 @@ final class TrackingViewModel: ObservableObject {
         )
 
         apply(point: point, location: location)
-        send(point: point)
     }
     
     @MainActor
@@ -72,15 +49,12 @@ final class TrackingViewModel: ObservableObject {
         self.locationHistory.append(point)
     }
     
-    private func send(point: LocationPoint) {
-        Task { [locationService, userId] in
-            do {
-                try await locationService.sendLocation(point, userId: userId)
-                await refreshMap()
-            } catch {
-                self.errorMessage = "Failed to sync location. Check your connection."
-            }
-        }
+    func selectLocation(_ point: LocationPoint) {
+        self.selectedLocation = point
+    }
+    
+    func deselectLocation() {
+        self.selectedLocation = nil
     }
     
     private func shouldAccept(_ location: CLLocation) -> Bool {
